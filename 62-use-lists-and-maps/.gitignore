@@ -1,0 +1,7 @@
+# Ignore all gradle directory
+.gradle/
+build/
+
+# Ignore all binaries
+bin/
+*.class
