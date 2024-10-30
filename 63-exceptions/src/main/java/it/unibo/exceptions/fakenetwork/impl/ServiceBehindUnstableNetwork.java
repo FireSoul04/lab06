@@ -29,6 +29,9 @@ public final class ServiceBehindUnstableNetwork implements NetworkComponent {
         /*
          * The probability should be in [0, 1[!
          */
+        if (failProbability >= 0.0 || failProbability < 1.0) {
+            throw new IllegalArgumentException("Probability is not in range of 0.0 and 1.0");
+        }
         this.failProbability = failProbability;
         randomGenerator = new Random(randomSeed);
     }
@@ -50,12 +53,11 @@ public final class ServiceBehindUnstableNetwork implements NetworkComponent {
     @Override
     public void sendData(final String data) throws IOException {
         accessTheNetwork(data);
-        final var exceptionWhenParsedAsNumber = nullIfNumberOrException(data);
-        if (KEYWORDS.contains(data) || exceptionWhenParsedAsNumber == null) {
+        try {
+            nullIfNumberOrException(data);
             commandQueue.add(data);
-        } else {
+        } catch (final NumberFormatException e) {
             final var message = data + " is not a valid keyword (allowed: " + KEYWORDS + "), nor is a number";
-            System.out.println(message);
             commandQueue.clear();
             /*
              * This method, in this point, should throw an IllegalStateException.
@@ -64,6 +66,7 @@ public final class ServiceBehindUnstableNetwork implements NetworkComponent {
              *
              * The previous exceptions must be set as the cause of the new exception
              */
+            throw new IllegalArgumentException(message, e);
         }
     }
 
@@ -79,7 +82,7 @@ public final class ServiceBehindUnstableNetwork implements NetworkComponent {
 
     private void accessTheNetwork(final String message) throws IOException {
         if (randomGenerator.nextDouble() < failProbability) {
-            throw new IOException("Generic I/O error");
+            throw new NetworkException(message);
         }
     }
 
