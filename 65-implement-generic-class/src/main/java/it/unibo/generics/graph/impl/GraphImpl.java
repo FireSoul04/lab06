@@ -1,11 +1,11 @@
 package it.unibo.generics.graph.impl;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.Map.Entry;
 
 import it.unibo.generics.graph.api.Graph;
 
@@ -39,18 +39,33 @@ public class GraphImpl<N> implements Graph<N> {
 
     @Override
     public List<N> getPath(final N source, final N target) {
-        final List<N> path = new ArrayList<>();
-        final Map<N, N> allPaths = ResearchAlgorithm.breadthFirstSearch(edges, source);
-        
-        for (final var x : allPaths.entrySet()) {
-            var y = x;
-            while (y != null) {
-                System.out.print(y.getKey() + "->");
-                y = Map.entry(y.getValue(), allPaths.get(y.getValue()));
-            }
-            System.out.print("nul");
+        final Map<N, N> allPaths = ResearchAlgorithm.depthFirstSearch(this.edges, source);
+        return getPathRecursive(allPaths, source, target);
+    }
+    
+    public List<N> getPath(final N source, final N target, final Algorithm algorithm) {
+        final Map<N, N> allPaths;
+        if (algorithm.equals(Algorithm.BFS)) {
+            allPaths = ResearchAlgorithm.breadthFirstSearch(this.edges, source);
+        } else if (algorithm.equals(Algorithm.DFS)) {
+            allPaths = ResearchAlgorithm.depthFirstSearch(this.edges, source);
+        } else {
+            throw new IllegalStateException("Invalid research algorithm");
         }
-        
-        return path;
+        return getPathRecursive(allPaths, source, target);
+    }
+
+    private List<N> getPathRecursive(final Map<N, N> allPaths, final N s, final N d) {
+        if (s.equals(d)) {
+            List<N> list = new ArrayList<>();
+            list.add(s);
+            return list;
+        } else if (allPaths.get(d) == null) {
+            return Collections.emptyList();
+        } else {
+            List<N> list = getPathRecursive(allPaths, s, allPaths.get(d));
+            list.add(d);
+            return list;
+        }
     }
 }

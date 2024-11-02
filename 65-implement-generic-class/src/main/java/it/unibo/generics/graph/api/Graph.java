@@ -8,6 +8,11 @@ import java.util.Set;
  *            node type
  */
 public interface Graph<N> {
+    
+    public static enum Algorithm {
+        BFS,
+        DFS
+    };
 
     /**
      * Adds a node: nothing happens if node is null or already there.
@@ -51,5 +56,6 @@ public interface Graph<N> {
      * @return a sequence of nodes connecting sources and target
      */
     List<N> getPath(N source, N target);
+    List<N> getPath(N source, N target, Algorithm algorithm);
 
 }

@@ -21,26 +21,22 @@ public class ResearchAlgorithm {
         final N source,
         final Set<N> nodes,
         final Map<N, Color> colors,
-        final Map<N, Double> distances,
         final Map<N, N> fathers
     ) {
         for (final N node : nodes) {
             colors.put(node, Color.WHITE);
-            distances.put(node, Double.POSITIVE_INFINITY);
             fathers.put(node, null);
         }
         colors.put(source, Color.GRAY);
-        distances.put(source, 0.0);
     }
     
     public static <N> Map<N, N> breadthFirstSearch(final Map<N, List<N>> edges, final N source) {
         final int graphNodes = edges.size();
         final Map<N, Color> colors = new HashMap<>(graphNodes);
-        final Map<N, Double> distances = new HashMap<>(graphNodes);
         final Map<N, N> fathers = new HashMap<>(graphNodes);
         final List<N> nodesQueue = new ArrayList<>();
 
-        initializeValues(source, edges.keySet(), colors, distances, fathers);
+        initializeValues(source, edges.keySet(), colors, fathers);
         
         nodesQueue.addFirst(source);
         while (!nodesQueue.isEmpty()) {
@@ -48,7 +44,6 @@ public class ResearchAlgorithm {
             for (final N dst : edges.get(src)) {
                 if (colors.get(dst).equals(Color.WHITE)) {
                     colors.put(dst, Color.GRAY);
-                    distances.put(dst, distances.get(src) + 1.0);
                     fathers.put(dst, src);
                     nodesQueue.addFirst(dst);
                 }
@@ -61,15 +56,13 @@ public class ResearchAlgorithm {
     public static <N> Map<N, N> depthFirstSearch(final Map<N, List<N>> edges, final N source) {
         final int graphNodes = edges.size();
         final Map<N, Color> colors = new HashMap<>(graphNodes);
-        final Map<N, Double> distances = new HashMap<>(graphNodes);
         final Map<N, N> fathers = new HashMap<>(graphNodes);
-        Double time = 0.0;
 
-        initializeValues(source, edges.keySet(), colors, distances, fathers);
+        initializeValues(source, edges.keySet(), colors, fathers);
         
         for (final N node : edges.keySet()) {
             if (colors.get(node).equals(Color.WHITE)) {
-                dfsVisit(colors, distances, fathers, edges, source, time);
+                dfsVisit(colors, fathers, edges, source);
             }
         }
         return new HashMap<>(fathers);
@@ -77,22 +70,18 @@ public class ResearchAlgorithm {
 
     private static <N> void dfsVisit(
         final Map<N, Color> colors,
-        final Map<N, Double> distances,
+        //final Map<N, Double> distances,
         final Map<N, N> fathers,
         final Map<N, List<N>> edges,
-        final N src,
-        Double time
+        final N src
     ) {
-        time++;
-        distances.put(src, time);
         colors.put(src, Color.GRAY);
         for (final N dst : edges.get(src)) {
             if (colors.get(dst).equals(Color.WHITE)) {
                 fathers.put(dst, src);
-                dfsVisit(colors, distances, fathers, edges, src, time);
+                dfsVisit(colors, fathers, edges, dst);
             }
         }
         colors.put(src, Color.BLACK);
-        time++;
     }
 }

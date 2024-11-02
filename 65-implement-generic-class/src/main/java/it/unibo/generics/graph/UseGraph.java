@@ -23,10 +23,20 @@ public final class UseGraph {
         /*
          * Test your graph implementation(s) by calling testGraph
          */
-        testGraph(new GraphImpl<>());
+        if (args.length <= 0) {
+            throw new IllegalArgumentException("No argument passed");
+        }
+
+        if (args[0].equals("BFS")) {
+            testGraph(new GraphImpl<>(), GraphImpl.Algorithm.BFS);
+        } else if (args[0].equals("DFS")) {
+            testGraph(new GraphImpl<>(), GraphImpl.Algorithm.DFS);
+        } else {
+            throw new IllegalArgumentException("Invalid algorithm");
+        }
     }
 
-    private static void testGraph(final Graph<String> graph) {
+    private static void testGraph(final Graph<String> graph, final GraphImpl.Algorithm algorithm) {
         graph.addNode("a");
         graph.addNode("b");
         graph.addNode("c");
@@ -49,12 +59,11 @@ public final class UseGraph {
         /*
          * Either the path b,c,a or b,c,d,e,a
          */
-        graph.getPath("b", "a");
-        // assertIsAnyOf(
-        //     graph.getPath("b", "a"),
-        //     Arrays.asList(splitOnWhiteSpace("b c a")),
-        //     Arrays.asList(splitOnWhiteSpace("b c d e a"))
-        // );
+        assertIsAnyOf(
+            graph.getPath("b", "a", algorithm),
+            Arrays.asList(splitOnWhiteSpace("b c a")),
+            Arrays.asList(splitOnWhiteSpace("b c d e a"))
+        );
     }
 
     private static void assertIsAnyOf(final Object actual, final Object... valid) {
