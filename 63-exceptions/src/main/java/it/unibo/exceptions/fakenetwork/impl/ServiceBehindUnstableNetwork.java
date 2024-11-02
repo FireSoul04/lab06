@@ -29,7 +29,7 @@ public final class ServiceBehindUnstableNetwork implements NetworkComponent {
         /*
          * The probability should be in [0, 1[!
          */
-        if (failProbability >= 0.0 || failProbability < 1.0) {
+        if (failProbability < 0.0 || failProbability >= 1.0) {
             throw new IllegalArgumentException("Probability is not in range of 0.0 and 1.0");
         }
         this.failProbability = failProbability;

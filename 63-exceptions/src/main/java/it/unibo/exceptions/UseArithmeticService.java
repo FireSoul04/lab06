@@ -53,7 +53,7 @@ public final class UseArithmeticService {
             try {
                 server.sendData(message);
                 valid = true;
-            } catch (IOException e) {
+            } catch (final IOException e) {
                 System.out.println("Cannot send message!");
             }
         }
@@ -70,7 +70,7 @@ public final class UseArithmeticService {
             try {
                 messageReceived = server.receiveResponse();
                 valid = true;
-            } catch (IOException e) {
+            } catch (final IOException e) {
                 System.out.println("Cannot receive message!");
             }
         }
