@@ -33,7 +33,7 @@ public final class ServiceBehindUnstableNetwork implements NetworkComponent {
             throw new IllegalArgumentException("Probability is not in range of 0.0 and 1.0");
         }
         this.failProbability = failProbability;
-        randomGenerator = new Random(randomSeed);
+        this.randomGenerator = new Random(randomSeed);
     }
 
     /**
@@ -54,11 +54,15 @@ public final class ServiceBehindUnstableNetwork implements NetworkComponent {
     public void sendData(final String data) throws IOException {
         accessTheNetwork(data);
         try {
-            nullIfNumberOrException(data);
-            commandQueue.add(data);
+            final var exceptionWhenParsedAsNumber = nullIfNumberOrException(data);
+            if (!KEYWORDS.contains(data) && exceptionWhenParsedAsNumber != null) {
+                throw exceptionWhenParsedAsNumber;
+            }
+            this.commandQueue.add(data);
         } catch (final NumberFormatException e) {
             final var message = data + " is not a valid keyword (allowed: " + KEYWORDS + "), nor is a number";
-            commandQueue.clear();
+            this.commandQueue.clear();
+            throw new IllegalArgumentException(message, e);
             /*
              * This method, in this point, should throw an IllegalStateException.
              * Its cause, however, is the previous NumberFormatException.
@@ -66,7 +70,6 @@ public final class ServiceBehindUnstableNetwork implements NetworkComponent {
              *
              * The previous exceptions must be set as the cause of the new exception
              */
-            throw new IllegalArgumentException(message, e);
         }
     }
 
@@ -74,14 +77,14 @@ public final class ServiceBehindUnstableNetwork implements NetworkComponent {
     public String receiveResponse() throws IOException {
         accessTheNetwork(null);
         try {
-            return new ArithmeticService(Collections.unmodifiableList(commandQueue)).process();
+            return new ArithmeticService(Collections.unmodifiableList(this.commandQueue)).process();
         } finally {
-            commandQueue.clear();
+            this.commandQueue.clear();
         }
     }
 
     private void accessTheNetwork(final String message) throws IOException {
-        if (randomGenerator.nextDouble() < failProbability) {
+        if (this.randomGenerator.nextDouble() < this.failProbability) {
             throw new NetworkException(message);
         }
     }

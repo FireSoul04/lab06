@@ -14,7 +14,7 @@ public class GraphImpl<N> implements Graph<N> {
     private final Map<N, List<N>> edges;
 
     public GraphImpl() {
-        edges = new HashMap<>();
+        this.edges = new HashMap<>();
     }
 
     @Override

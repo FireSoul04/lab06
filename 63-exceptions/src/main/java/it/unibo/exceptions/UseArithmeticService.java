@@ -48,11 +48,11 @@ public final class UseArithmeticService {
          * This method should re-try to send message to the provided server, catching all IOExceptions,
          * until it succeeds.
          */
-        boolean valid = false;
-        while (!valid) {
+        boolean isServerReachable = false;
+        while (!isServerReachable) {
             try {
                 server.sendData(message);
-                valid = true;
+                isServerReachable = true;
             } catch (final IOException e) {
                 System.out.println("Cannot send message!");
             }
@@ -64,12 +64,10 @@ public final class UseArithmeticService {
          * This method should re-try to retrieve information from the provided server, catching all IOExceptions,
          * until it succeeds.
          */
-        String messageReceived = "";
-        boolean valid = false;
-        while (!valid) {
+        String messageReceived = null;
+        while (messageReceived == null) {
             try {
                 messageReceived = server.receiveResponse();
-                valid = true;
             } catch (final IOException e) {
                 System.out.println("Cannot receive message!");
             }

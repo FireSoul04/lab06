@@ -73,7 +73,7 @@ public final class UseListsAndMaps {
          */
         final List<Integer> arrayList = new ArrayList<>();
         for (int i = START; i < END; i++) {
-            arrayList.addFirst(i);
+            arrayList.add(i);
         }
         /*
          * 2) Create a new LinkedList<Integer> and, in a single line of code

@@ -110,10 +110,10 @@ public class UserImpl implements User {
         }
         if (o != null && getClass().equals(o.getClass())) {
             final UserImpl user = (UserImpl) o;
-            return firstName.equals(user.getFirstName())
-                && lastName.equals(user.getLastName())
-                && username.equals(user.getUsername())
-                && age == user.getAge();
+            return this.firstName.equals(user.getFirstName())
+                && this.lastName.equals(user.getLastName())
+                && this.username.equals(user.getUsername())
+                && this.age == user.getAge();
         }
         return false;
     }
@@ -126,10 +126,10 @@ public class UserImpl implements User {
         /*
          * All fields are final and immutable: lazy initialization allowed.
          */
-        if (hash == 0) {
-            hash = Objects.hash(firstName, lastName, username, age);
+        if (this.hash == 0) {
+            this.hash = Objects.hash(this.firstName, this.lastName, this.username, this.age);
         }
-        return hash;
+        return this.hash;
     }
 
     /**

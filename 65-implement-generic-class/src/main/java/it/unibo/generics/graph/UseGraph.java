@@ -23,13 +23,10 @@ public final class UseGraph {
         /*
          * Test your graph implementation(s) by calling testGraph
          */
-        if (args.length <= 0) {
-            throw new IllegalArgumentException("No argument passed");
-        }
-
-        if (args[0].equals("BFS")) {
+        // By default, if no arguments are passed, it calls BFS
+        if (args.length <= 0 || args[0].toUpperCase().equals("BFS")) {
             testGraph(new GraphImpl<>(), GraphImpl.Algorithm.BFS);
-        } else if (args[0].equals("DFS")) {
+        } else if (args[0].toUpperCase().equals("DFS")) {
             testGraph(new GraphImpl<>(), GraphImpl.Algorithm.DFS);
         } else {
             throw new IllegalArgumentException("Invalid algorithm");
