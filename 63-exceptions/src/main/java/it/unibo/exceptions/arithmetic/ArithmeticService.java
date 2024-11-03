@@ -54,10 +54,10 @@ public final class ArithmeticService {
      *
      * @return the result of the process
      */
-    public String process() throws IllegalArgumentException {
+    public String process() throws IllegalStateException {
         try {
             if (this.commandQueue.isEmpty()) {
-                throw new IllegalArgumentException("No commands sent, no result available");
+                throw new IllegalStateException("No commands sent, no result available");
             }
             while (this.commandQueue.size() != 1) {
                 final var nextMultiplication = this.commandQueue.indexOf(TIMES);
@@ -75,18 +75,18 @@ public final class ArithmeticService {
                         : max(nextSum, nextMinus);
                     if (nextOp != -1) {
                         if (this.commandQueue.size() < 3) {
-                            throw new IllegalArgumentException("Inconsistent operation: " + this.commandQueue);
+                            throw new IllegalStateException("Inconsistent operation: " + this.commandQueue);
                         }
                         computeAt(nextOp);
                     } else if (this.commandQueue.size() > 1) {
-                        throw new IllegalArgumentException("Inconsistent state: " + this.commandQueue);
+                        throw new IllegalStateException("Inconsistent state: " + this.commandQueue);
                     }
                 }
             }
             final var finalResult = this.commandQueue.get(0);
             final var possibleException = nullIfNumberOrException(finalResult);
             if (possibleException != null) {
-                throw new IllegalArgumentException("Invalid result of operation: " + finalResult);
+                throw new IllegalStateException("Invalid result of operation: " + finalResult);
             }
             return finalResult;
         } finally {
