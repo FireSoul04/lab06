@@ -70,7 +70,6 @@ public class ResearchAlgorithm {
 
     private static <N> void dfsVisit(
         final Map<N, Color> colors,
-        //final Map<N, Double> distances,
         final Map<N, N> fathers,
         final Map<N, List<N>> edges,
         final N src

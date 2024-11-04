@@ -57,13 +57,13 @@ public class GraphImpl<N> implements Graph<N> {
 
     private List<N> getPathRecursive(final Map<N, N> allPaths, final N s, final N d) {
         if (s.equals(d)) {
-            List<N> list = new ArrayList<>();
+            final List<N> list = new ArrayList<>();
             list.add(s);
             return list;
         } else if (allPaths.get(d) == null) {
             return Collections.emptyList();
         } else {
-            List<N> list = getPathRecursive(allPaths, s, allPaths.get(d));
+            final List<N> list = getPathRecursive(allPaths, s, allPaths.get(d));
             list.add(d);
             return list;
         }

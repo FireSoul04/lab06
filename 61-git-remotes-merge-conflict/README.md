@@ -12,7 +12,7 @@ si verifichi lo stato del repository con `git status`.
 
 1. Si cloni localmente il repository
 
-```
+```shell
 ▶ git clone https://github.com/APICe-at-DISI/OOP-git-merge-conflict-test.git
 Cloning into 'OOP-git-merge-conflict-test'...
 remote: Enumerating objects: 12, done.
@@ -25,7 +25,7 @@ Resolving deltas: 100% (2/2), done.
 
 2. Ci si assicuri di avere localmente entrambi i branch remoti
 
-```
+```shell
 ▶ git branch -a
 * master
   remotes/origin/HEAD -> origin/master
@@ -36,7 +36,7 @@ Resolving deltas: 100% (2/2), done.
 3. Si faccia il merge di `feature` dentro `master`, ossia: si posizioni la `HEAD` su `master`
    e da qui si esegua il merge di `feature`
 
-```
+```shell
 ▶ git merge origin/feature
 Auto-merging HelloWorld.java
 CONFLICT (content): Merge conflict in HelloWorld.java
@@ -63,7 +63,22 @@ no changes added to commit (use "git add" and/or "git commit -a")
      che il nome dell'autore del file
      (funzionalità presente su `feature`)
 
-```
+```shell
+▶ cat HelloWorld.java
+public final class HelloWorld {
+
+        private static final String AUTHOR = "Danilo Pianini";
+
+        public static void main(final String[] args) {
+                System.out.println("This program is running in a PC with " + procNumber() + " logic processors!");
+                System.out.println("This program has been realised by " + AUTHOR);
+        }
+
+        public static int procNumber() {
+                return Runtime.getRuntime().availableProcessors();
+        }
+
+}
 ▶ git status
 On branch master
 Your branch is up to date with 'origin/master'.
@@ -82,7 +97,7 @@ no changes added to commit (use "git add" and/or "git commit -a")
 6. Si crei un nuovo repository nel proprio github personale
 7. Si aggiunga il nuovo repository creato come **remote** e si elenchino i remote
 
-```
+```shell
 ▶ git remote add exercise https://github.com/FireSoul04/61-git-remotes-merge-conflict.git
 ▶ git remote -v
 exercise        https://github.com/FireSoul04/61-git-remotes-merge-conflict.git (fetch)
@@ -93,7 +108,7 @@ origin  https://github.com/APICe-at-DISI/OOP-git-merge-conflict-test.git (push)
 
 8. Si faccia push del branch `master` sul proprio repository
 
-```
+```shell
 ▶ git push -u exercise master
 Enumerating objects: 9, done.
 Counting objects: 100% (9/9), done.
@@ -122,7 +137,7 @@ no changes added to commit (use "git add" and/or "git commit -a")
 
 9. Si setti il branch remoto `master` del nuovo repository come *upstream* per il proprio branch `master` locale
 
-```
+```shell
 ▶ git branch --set-upstream-to=exercise/master master
 Branch 'master' set up to track remote branch 'master' from 'exercise'.
 ▶ git add .
